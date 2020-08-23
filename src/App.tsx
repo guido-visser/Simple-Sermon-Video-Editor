@@ -3,17 +3,17 @@ import "./App.scss";
 import wretch from "wretch";
 
 class App extends React.PureComponent<any, any> {
-    state = {timemark: "00:00:00:00", fps: 0};
+    state = { timemark: "00:00:00:00", fps: 0 };
     componentDidMount() {
         this.poll();
     }
-    
+
     poll = () => {
         wretch("/poll")
             .get()
             .json((res) => {
-                if(res.action === 'renderUpdate'){
-                    this.setState({timemark: res.timemark, fps: res.currentFps});
+                if (res.action === "renderUpdate") {
+                    this.setState({ timemark: res.timemark, fps: res.currentFps });
                 }
                 this.poll();
             })
@@ -29,14 +29,22 @@ class App extends React.PureComponent<any, any> {
             .json((res) => console.log(res));
     };
 
-    render(){
-        const {timemark, fps} = this.state;
-        return (<div className="App">
-        <button onClick={this.handleClick}>Merge files</button>
-        <div>Timemark: {timemark}</div>
-        <div>FPS: {fps}</div>
-    </div>)
-    
+    handleTestClick = () => {
+        wretch("/test")
+            .get()
+            .json((res) => console.log(res));
+    };
+
+    render() {
+        const { timemark, fps } = this.state;
+        return (
+            <div className="App">
+                <button onClick={this.handleClick}>Merge files</button>
+                <button onClick={this.handleTestClick}>Test</button>
+                <div>Timemark: {timemark}</div>
+                <div>FPS: {fps}</div>
+            </div>
+        );
     }
 }
 
