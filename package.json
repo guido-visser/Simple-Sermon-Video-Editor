@@ -3,16 +3,21 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@craco/craco": "^5.6.4",
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
         "@types/jest": "^24.0.0",
+        "@types/lodash": "^4.14.160",
         "@types/node": "^12.0.0",
         "@types/react": "^16.9.0",
         "@types/react-dom": "^16.9.0",
+        "antd": "^4.6.2",
+        "craco-less": "^1.17.0",
         "express": "^4.17.1",
         "express-longpoll": "^0.0.6",
         "fluent-ffmpeg": "^2.1.2",
+        "lodash": "^4.17.20",
         "node-sass": "^4.14.1",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
@@ -21,12 +26,12 @@
         "wretch": "^1.7.2"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
+        "start": "craco start",
+        "build": "craco build",
+        "test": "craco test",
+        "eject": "craco eject",
         "server": "nodemon server.js",
-        "dev": "concurrently \"nodemon server.js\" \"react-scripts start\""
+        "dev": "concurrently \"nodemon server.js\" \"craco start\""
     },
     "eslintConfig": {
         "extends": "react-app"
