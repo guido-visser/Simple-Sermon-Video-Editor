@@ -1,14 +1,7 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const path = require("path");
-const app = express();
-var longpoll = require("express-longpoll")(app);
-app.use(express.static(path.join(__dirname, "build")));
+const app = require("./express");
+const lp = require("./longpoll");
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-longpoll.create("/poll");
+lp.create("/poll");
 
 let currentJob = null;
 
@@ -31,5 +24,3 @@ app.get("/", function (req, res) {
 });
 
 app.listen(process.env.PORT || 8080);
-
-module.exports = longpoll;
