@@ -1,4 +1,4 @@
-## Simple Sermon Video Editor
+## Simple Video Editor
 
 This application will make editing with a standard format easier. Such as:
 
