@@ -16,7 +16,7 @@ router.post("/upload", (req, res) => {
     file.mv(`./upload/${file.name}`, function (err) {
         if (err) return res.status(500).send(err);
 
-        res.json({ upload: "success", location: `./upload/${file.name}` });
+        res.json({ id: uuidv4(), location: `./upload/${file.name}`, file });
     });
 });
 

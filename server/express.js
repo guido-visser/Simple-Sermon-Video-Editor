@@ -8,5 +8,6 @@ app.use(express.static(path.join(__dirname, "build")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/upload/" }));
+app.use("/upload", express.static("../upload"));
 
 module.exports = app;

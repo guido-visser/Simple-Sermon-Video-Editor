@@ -17,9 +17,9 @@ app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-// Publish every 5 seconds
+// Publish every 50 seconds
 setInterval(function () {
     lp.publish("/poll", { heartbeat: new Date().getTime() });
-}, 47000);
+}, 50000);
 
 app.listen(process.env.PORT || 8080);

@@ -4,6 +4,8 @@ import wretch from "wretch";
 import { Layout, Menu } from "antd";
 import GvUpload from "./components/GvUpload";
 import { VideoItem } from "./interfaces/Types";
+import VideoPage from "./pages/Video";
+import _, { Dictionary } from "lodash";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -11,10 +13,12 @@ interface State {
     timemark: string;
     fps: number;
     videos: VideoItem[];
+    selectedMenuItem: string;
+    videosIndex: Dictionary<VideoItem>;
 }
 
 class App extends React.PureComponent<any, any> {
-    state: State = { timemark: "00:00:00:00", fps: 0, videos: [] };
+    state: State = { timemark: "00:00:00:00", fps: 0, videos: [], selectedMenuItem: "start", videosIndex: {} };
     componentDidMount() {
         this.poll();
     }
@@ -36,12 +40,13 @@ class App extends React.PureComponent<any, any> {
             });
     };
 
-    handleClick = () => {};
-
     addVideoToState = (videoItem: VideoItem) => {
-        const { videos } = this.state;
+        const { videos, videosIndex } = this.state;
+        let newVideoIndexes = { ...videosIndex, [videoItem.id]: videoItem };
+
         this.setState({
             videos: [...videos, { ...videoItem }],
+            videosIndex: newVideoIndexes,
         });
     };
 
@@ -61,24 +66,36 @@ class App extends React.PureComponent<any, any> {
         this.setState({ [name]: event.target.value });
     };
 
+    renderContent = () => {
+        const { selectedMenuItem, videosIndex } = this.state;
+        const vi = videosIndex[selectedMenuItem];
+        if(selectedMenuItem === 'start'){
+            return <GvUpload onUploadComplete={this.addVideoToState} />;
+        } else {
+            return <VideoPage videoItem={vi} />;
+        }
+    };
+
     render() {
-        const { videos } = this.state;
+        const { videos, selectedMenuItem } = this.state;
         return (
             <div className="App">
                 <Layout>
                     <Sider>
-                        <Menu defaultSelectedKeys={["start"]} theme="dark">
+                        <Menu
+                            selectedKeys={[selectedMenuItem]}
+                            onClick={(event) => this.setState({ selectedMenuItem: event.key })}
+                            theme="dark"
+                        >
                             <Menu.Item key="start">Start</Menu.Item>
                             {videos.map((vi, index) => (
-                                <Menu.Item key={vi.location}>File {index + 1}</Menu.Item>
+                                <Menu.Item key={vi.id}>File {index + 1}</Menu.Item>
                             ))}
                         </Menu>
                     </Sider>
                     <Layout>
                         <Header>Simple Sermon Video Editor</Header>
-                        <Content>
-                            <GvUpload onUploadComplete={this.addVideoToState} />
-                        </Content>
+                        <Content>{this.renderContent()}</Content>
                         <Footer>
                             <div className="credits">By Guido Visser</div>
                         </Footer>
