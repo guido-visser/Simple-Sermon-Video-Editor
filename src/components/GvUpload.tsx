@@ -2,17 +2,19 @@ import React, { PureComponent } from "react";
 import { Upload, message } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
 import { UploadFile } from "antd/lib/upload/interface";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import "./GvUpload.scss";
+import { VideoItem } from "@/interfaces/Types";
 
 interface State {
     loading: boolean;
 }
 
-class GvUpload extends PureComponent {
-    state: State = { loading: false };
+interface GvUploadProps {
+    onUploadComplete?: (videoItem: VideoItem) => void;
+}
 
-    handleUpload = (info: UploadChangeParam<UploadFile<any>>) => {};
+class GvUpload extends PureComponent<GvUploadProps> {
+    state: State = { loading: false };
 
     render() {
         const { loading } = this.state;
@@ -20,13 +22,17 @@ class GvUpload extends PureComponent {
             name: "file",
             multiple: true,
             action: "/api/main/upload",
-            onChange(info: UploadChangeParam<UploadFile<any>>) {
+            onChange: (info: UploadChangeParam<UploadFile<any>>) => {
                 const { status } = info.file;
+                const { onUploadComplete } = this.props;
                 if (status !== "uploading") {
                     console.log(info.file, info.fileList);
                 }
                 if (status === "done") {
                     message.success(`${info.file.name} file uploaded successfully.`);
+                    if (onUploadComplete) {
+                        onUploadComplete(info.file.response);
+                    }
                 } else if (status === "error") {
                     message.error(`${info.file.name} file upload failed.`);
                 }
